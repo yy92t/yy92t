@@ -1,13 +1,23 @@
-name: test001
-run-name: ${{ github.actor }} is learning GitHub Actions
-on: [push]
+name: Run Script
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
 jobs:
-  check-bats-version:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
-          node-version: '20'
-      - run: npm install -g bats
-      - run: bats -v
+          python-version: '3.x'
+      - uses: jannekem/run-python-script-action@v1
+        with:
+          script: |
+            import os
+            print("Directory contents:")
+            for f in os.listdir():
+                print(f)
